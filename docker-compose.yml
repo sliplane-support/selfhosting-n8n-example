@@ -1,0 +1,52 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: n8n_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - n8n_postgres_data:/var/lib/postgresql/data
+    networks:
+      - n8n_network
+
+  n8n:
+    image: n8nio/n8n:2.4.4
+    container_name: n8n
+    restart: unless-stopped
+    environment:
+      DB_TYPE: postgres
+      DB_POSTGRESDB_HOST: ${POSTGRES_HOST}
+      DB_POSTGRESDB_PORT: ${POSTGRES_PORT}
+      DB_POSTGRESDB_DATABASE: ${POSTGRES_DB}
+      DB_POSTGRESDB_USER: ${POSTGRES_USER}
+      DB_POSTGRESDB_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - n8n_network
+    depends_on:
+      - postgres
+
+  caddy:
+    image: caddy:2
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./conf:/etc/caddy
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - n8n_network
+
+networks:
+  n8n_network:
+
+volumes:
+  caddy_data:
+  caddy_config:
+  n8n_postgres_data:
+
