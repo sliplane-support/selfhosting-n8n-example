@@ -119,5 +119,8 @@ This will download and run the services defined in the docker-compose.yml file.
 Once the services are up and running, you can access n8n in a browser using your custom domain.
 
 
+## How to move on from here?
+
+We already have setup some basic security measures like using SSH keys instead of passwords, enabling backups and using the Hetzner firewall. In a production setting, you probably want to dig a little deeper into the topic of VPS hardening. You can also further improve the setup by adding logging and monitoring and automatic deploys from GitHub. If you want all of that out of the box, check out [Sliplane](https://sliplane.io/n8n-hosting?utm_source=gh-selfhosting-n8n).
 
 
